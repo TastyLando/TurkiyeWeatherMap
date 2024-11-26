@@ -45,43 +45,43 @@
         </main>
     </div>
         
-    
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const cloudContainer = document.body;
 
-            
+
             function createCloud() {
                 const cloud = document.createElement("div");
                 cloud.classList.add("cloud");
-                const size = Math.random() * 200 + 100; 
+                const size = Math.random() * 200 + 100;
                 cloud.style.width = size + "px";
                 cloud.style.height = size / 2 + "px";
-                cloud.style.top = Math.random() * window.innerHeight + "px"; 
+                cloud.style.top = Math.random() * window.innerHeight + "px";
                 cloud.style.left = -size + "px";
 
                 cloudContainer.appendChild(cloud);
 
-               
+
                 const moveCloud = () => {
-                    const cloudSpeed = Math.random() * 2 + 1; 
+                    const cloudSpeed = Math.random() * 2 + 1;
                     cloud.style.left = parseFloat(cloud.style.left) + cloudSpeed + "px";
 
                     if (parseFloat(cloud.style.left) > window.innerWidth) {
-                        cloud.style.left = -size + "px"; 
+                        cloud.style.left = -size + "px";
                     }
                 };
 
-                
-                setInterval(moveCloud, 16); 
+
+                setInterval(moveCloud, 16);
             }
 
-           
+
             for (let i = 0; i < 5; i++) {
                 createCloud();
             }
         });
     </script>
+   
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
