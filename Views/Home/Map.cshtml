@@ -1,5 +1,4 @@
-﻿
-
+﻿@model WeatherData
 @{
     ViewBag.Title = "Turkey Weather Map";
     Layout = null;
@@ -393,32 +392,55 @@
             </g>
         </svg>
     </div>
+    <div id="info-box" style="display:none; position:absolute; background:white; border:1px solid black; padding:10px;">
+        <p id="city-name"></p>
+        <p id="weather-data"></p>
+    </div>
 
-    <script>
-        async function fetchWeather(city) {
-            const response = await fetch(`/Weather/GetCityWeather?city=${city}`);
-            const data = await response.json();
-            console.log(data);
-            
-            const cityElement = document.querySelector(`#${city}`);
-            if (cityElement) {
-                
-                const titleElement = cityElement.querySelector('title');
-                if (titleElement) {
-                    titleElement.textContent = `${city}: ${data.temp_c}°C, ${data.condition}`;
-                }
-            }
-        }
+   
 
-        
-        fetchWeather("Ankara");
-        fetchWeather("Istanbul");
-        fetchWeather("Izmir"); 
-    </script>
+    <h2>Weather in @Model.Location.Name</h2>
 
-
+    <div>
+        <p><strong>Temperature:</strong> @Model.Current.TempC °C (@Model.Current.TempF °F)</p>
+        <p><strong>Condition:</strong> @Model.Current.Condition.Text</p>
+        <p><img src="https:@Model.Current.Condition.Icon" alt="Weather Icon" /></p>
+        <p><strong>Wind:</strong> @Model.Current.WindKph kph (@Model.Current.WindMph mph)</p>
+        <p><strong>Humidity:</strong> @Model.Current.Humidity%</p>
+        <p><strong>Cloudiness:</strong> @Model.Current.Cloud%</p>
+        <p><strong>Feels Like:</strong> @Model.Current.FeelsLikeC °C (@Model.Current.FeelsLikeF °F)</p>
+    </div>
     
 
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Tüm illeri seç
+        const cities = document.querySelectorAll("svg g");
+
+        cities.forEach(city => {
+            city.addEventListener("click", (event) => {
+                const cityId = city.getAttribute("id"); // İl adı olarak id kullanılıyor
+                showWeather(cityId); // Hava durumu verisini göster
+            });
+        });
+    });
+
+    async function showWeather(city) {
+        // Hava durumu verisini çek
+        const response = await fetch(`/Weather/GetCityWeather?city=${city}`);
+        const data = await response.json();
+
+        // Bilgi kutusunu doldur ve göster
+        const infoBox = document.getElementById("info-box");
+        document.getElementById("city-name").textContent = `Şehir: ${city}`;
+        document.getElementById("weather-data").textContent = `Durum: ${data.condition}, Sıcaklık: ${data.temp_c}°C`;
+
+        infoBox.style.display = "block";
+        infoBox.style.left = `${event.pageX + 10}px`;
+        infoBox.style.top = `${event.pageY + 10}px`;
+    }
+
+</script>
 </html>
